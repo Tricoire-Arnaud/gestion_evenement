@@ -22,7 +22,6 @@ services:
 
     App\Service\AppManager:
         arguments:
-            $userRepository: '@App\Repository\UserRepository'
             $eventRepository: '@App\Repository\EventRepository'
             $entityManager: '@doctrine.orm.entity_manager'
 

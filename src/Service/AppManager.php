@@ -5,17 +5,18 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\Event;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AppManager
 {
-
     private $entityManager;
+    private $eventRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository)
     {
-        
         $this->entityManager = $entityManager;
+        $this->eventRepository = $eventRepository;
     }
 
     public function registerUser(array $userData): User
@@ -85,6 +86,11 @@ class AppManager
     {
         $this->entityManager->remove($event);
         $this->entityManager->flush();
+    }
+
+    public function getAllEvents(): array
+    {
+        return $this->eventRepository->findAll();
     }
 
    
