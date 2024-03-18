@@ -20,5 +20,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\AppManager:
+        arguments:
+            $userRepository: '@App\Repository\UserRepository'
+            $eventRepository: '@App\Repository\EventRepository'
+            $entityManager: '@doctrine.orm.entity_manager'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
