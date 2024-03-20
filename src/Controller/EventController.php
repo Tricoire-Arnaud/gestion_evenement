@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Service\AppManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\DateRangeFilterType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EventController extends AbstractController
 {
@@ -17,6 +18,33 @@ class EventController extends AbstractController
     public function __construct(AppManager $appManager)
     {
         $this->appManager = $appManager;
+    }
+
+    #[Route('/', name: 'home')]
+    public function home(Request $request, AppManager $appManager): Response
+    {
+        $form = $this->createForm(DateRangeFilterType::class);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $start_date = \DateTime::createFromFormat('Y-m-d', $data['start_date']);
+            $end_date = \DateTime::createFromFormat('Y-m-d', $data['end_date']);
+    
+            // Vérifiez si les dates ont été correctement parsées
+            if (!$start_date || !$end_date) {
+                throw new \InvalidArgumentException('Format de date invalide.');
+            }
+    
+            $events = $appManager->getEventsByDateRange($start_date, $end_date);
+        } else {
+            $events = $appManager->getAllUpcomingEvents();
+        }
+    
+        return $this->render('event/home.html.twig', [
+            'form' => $form->createView(),
+            'events' => $events,
+        ]);
     }
 
     #[Route('/events/create', name: 'event_create')]
@@ -29,7 +57,7 @@ class EventController extends AbstractController
             $this->appManager->createEvent($form->getData(), $this->getUser());
 
             $this->addFlash('success', 'L\'événement a été créé avec succès.');
-            return $this->redirectToRoute('event_list');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('event/create.html.twig', [
@@ -47,7 +75,7 @@ class EventController extends AbstractController
             $this->appManager->updateEvent($event, $form->getData());
 
             $this->addFlash('success', 'L\'événement a été modifié avec succès.');
-            return $this->redirectToRoute('event_list');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('event/edit.html.twig', [
@@ -61,7 +89,8 @@ class EventController extends AbstractController
         $this->appManager->deleteEvent($event);
 
         $this->addFlash('success', 'L\'événement a été supprimé avec succès.');
-        return $this->redirectToRoute('event_list');
+        return $this->redirectToRoute('home');
+
     }
 
     #[Route('/events/{id}', name: 'event_show')]
@@ -71,14 +100,10 @@ class EventController extends AbstractController
             'event' => $event,
         ]);
     }
-
+    
     #[Route('/events', name: 'event_list')]
     public function list(): Response
     {
-        $events = $this->appManager->getAllEvents();
-
-        return $this->render('event/list.html.twig', [
-            'events' => $events,
-        ]);
+        return $this->redirectToRoute('home');
     }
 }

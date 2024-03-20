@@ -93,5 +93,18 @@ class AppManager
         return $this->eventRepository->findAll();
     }
 
+    public function getEventsByDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+    {
+        return $this->eventRepository->findByDateRange($startDate, $endDate);
+    }
+    
+    
+    
+
+    public function getAllUpcomingEvents(): array
+    {
+        return $this->eventRepository->findUpcomingEvents();
+    }
+
    
 }

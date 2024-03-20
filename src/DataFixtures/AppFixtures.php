@@ -1,5 +1,4 @@
 <?php
-
 // src/DataFixtures/AppFixtures.php
 
 namespace App\DataFixtures;
@@ -29,12 +28,19 @@ class AppFixtures extends Fixture
                 $event = new Event();
                 $event->setTitle($faker->sentence);
                 $event->setDescription($faker->paragraph);
+
                 // Génération de la date de début de l'événement
                 $startDate = $faker->dateTimeBetween('now', '+1 week');
-                // Génération de la date de fin de l'événement
-                do {
-                    $endDate = $faker->dateTimeBetween($startDate, '+1 month');
-                } while ($endDate <= $startDate);
+                // Génération de la date de fin de l'événement en ajoutant un nombre aléatoire de jours à la date de début
+                $endDate = clone $startDate;
+                $endDate->modify('+' . $faker->numberBetween(1, 30) . ' days');
+
+                // Vérifier si la date de fin est antérieure à la date de début et ajuster si nécessaire
+                if ($endDate <= $startDate) {
+                    $endDate = clone $startDate;
+                    $endDate->modify('+1 day');
+                }
+
                 $event->setBeginDate($startDate);
                 $event->setEndDate($endDate);
                 $event->setPlace($faker->address);

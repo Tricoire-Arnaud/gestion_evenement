@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'accueil{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1>Événements à venir</h1>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            {{ form_start(form, {'attr': {'class': 'd-flex form-row justify-content-between align-items-center'}}) }}
+                <div class="form-group col-md-6">
+                    <label for="{{ form.start_date.vars.id }}">Date de début</label>
+                    {{ form_widget(form.start_date, {'attr': {'class': 'form-controldatepicker input-group-text', 'placeholder': 'jj-mm-aaaa', 'style': 'height: auto;'}}) }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{ form.end_date.vars.id }}">Date de fin</label>
+                    {{ form_widget(form.end_date, {'attr': {'class': 'form-controldatepicker input-group-text', 'placeholder': 'jj-mm-aaaa', 'style': 'height: auto;'}}) }}
+                </div>
+                <div class="form-group ml-2">
+                    <div class="d-flex">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mr-2', 'style': 'height: auto;'}}) }}
+                        <a href="{{ path('home') }}" class="btn btn-secondary" style="height: auto;">Réinitialiser les filtres</a>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+    </div>
+  </div>
+  {% if form.start_date.vars.data is defined and form.end_date.vars.data is defined %}
+    {% set startDate = form.start_date.vars.data %}
+    {% set endDate = form.end_date.vars.data %}
+    {% if startDate is empty and endDate is empty %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Les événements à venir</h2>
+        </div>
+      </div>
+    {% else %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Les événements pour les dates du {{ form.start_date.vars.data|date('d-m-Y') }} au {{ form.end_date.vars.data|date('d-m-Y') }} inclus </h2>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Les événements à venir</h2>
+      </div>
+    </div>
+  {% endif %}
+  <div class="row">
+    {% for event in events %}
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ event.title }}</h5>
+            <p class="card-text">{{ event.description|slice(0, 50) ~ '...' }}</p>
+            <p class="card-text">Début: {{ event.beginDate|date('d-m-Y H:i') }}</p>
+            <p class="card-text">Fin: {{ event.endDate|date('d-m-Y H:i') }}</p>
+            <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-primary">Voir plus</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

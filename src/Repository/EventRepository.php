@@ -21,6 +21,29 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findByDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.beginDate >= :start_date')
+            ->andWhere('e.endDate <= :end_date')
+            ->setParameter('start_date', $startDate)
+            ->setParameter('end_date', $endDate)
+            ->orderBy('e.beginDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
+    public function findUpcomingEvents(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.beginDate >= :current_date')
+            ->setParameter('current_date', new \DateTime())
+            ->orderBy('e.beginDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Event[] Returns an array of Event objects
     //     */
