@@ -27,7 +27,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Appeler la méthode registerUser avec l'objet User via le service AppManager
             $this->appManager->registerUser($user);
 
             $this->addFlash('success', 'Inscription réussie! Vous pouvez maintenant vous connecter.');
@@ -38,18 +37,16 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
+
 
     #[Route('/login', name: 'user_login')]
     public function login(): Response
     {
-        // Gérer la logique de connexion ici
         return $this->render('user/login.html.twig');
     }
 
     #[Route('/logout', name: 'user_logout')]
     public function logout(): void
     {
-        // Gérer la logique de déconnexion ici
     }
 }

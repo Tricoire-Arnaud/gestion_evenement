@@ -2,19 +2,32 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'événement {{ event.title }}{% endblock %}
+{% block title %}Détails de l'événement
+	{{ event.title }}
+{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{ event.title }}</h1>
-                <p><strong>Description :</strong> {{ event.description }}</p>
-                <p><strong>Date de début :</strong> {{ event.beginDate|date('d-m-Y H:i') }}</p>
-                <p><strong>Date de fin :</strong> {{ event.endDate|date('d-m-Y H:i') }}</p>
-                <p><strong>Lieu :</strong> {{ event.place }}</p>
-                <a href="{{ path('home') }}" class="btn btn-primary">Retour à la liste des événements</a>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>{{ event.title }}</h1>
+				<p>
+					<strong>Description :</strong>
+					{{ event.description }}</p>
+				<p>
+					<strong>Date de début :</strong>
+					{{ event.beginDate|date('d-m-Y H:i') }}</p>
+				<p>
+					<strong>Date de fin :</strong>
+					{{ event.endDate|date('d-m-Y H:i') }}</p>
+				<p>
+					<strong>Lieu :</strong>
+					{{ event.place }}</p>
+				<p>
+					<strong>Organisateur :</strong>
+					{{ event.creator.name }}</p>
+				<a href="{{ path('home') }}" class="btn btn-primary">Retour à la liste des événements</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

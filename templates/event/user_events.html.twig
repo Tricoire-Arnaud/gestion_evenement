@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes événements
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="row mb-4">
+			<div class="col-md-12">
+				<h1>Mes événements</h1>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Événements créés</h2>
+				{% for event in createdEvents %}
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title">{{ event.title }}</h5>
+							<p class="card-text">{{ event.description|slice(0, 50) ~ '...' }}</p>
+							<p class="card-text">Début:
+								{{ event.beginDate|date('d-m-Y H:i') }}</p>
+							<p class="card-text">Fin:
+								{{ event.endDate|date('d-m-Y H:i') }}</p>
+							{% if event.creator == app.user %}
+								<a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-primary">Modifier</a>
+								<a href="{{ path('event_delete', {'id': event.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')">Supprimer</a>
+							{% endif %}
+							<a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-primary">Voir plus</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="col-md-6">
+				<h2>Événements inscrits</h2>
+				{% for event in registeredEvents %}
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title">{{ event.title }}</h5>
+							<p class="card-text">{{ event.description|slice(0, 50) ~ '...' }}</p>
+							<p class="card-text">Début:
+								{{ event.beginDate|date('d-m-Y H:i') }}</p>
+							<p class="card-text">Fin:
+								{{ event.endDate|date('d-m-Y H:i') }}</p>
+							<a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-primary">Voir plus</a>
+							{% if event.registeredUsers.contains(app.user) %}
+								<a href="{{ path('event_unregister', {'id': event.id}) }}" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('unregister-form-{{ event.id }}').submit();">Se désinscrire</a>
+
+								<form id="unregister-form-{{ event.id }}" action="{{ path('event_unregister', {'id': event.id}) }}" method="POST" style="display: none;">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('unregister' ~ event.id) }}">
+								</form>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

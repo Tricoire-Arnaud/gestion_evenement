@@ -18,13 +18,13 @@ class DateRangeFilterType extends AbstractType
                 'label' => 'Date de début',
                 'widget' => 'single_text',
                 'input' => 'string',
-                'attr' => ['placeholder' => 'jj-mm-aaaa'], // Placeholder for dd-mm-yyyy format
+                'attr' => ['placeholder' => 'jj-mm-aaaa'],
             ])
             ->add('end_date', DateType::class, [
                 'label' => 'Date de fin',
                 'widget' => 'single_text',
                 'input' => 'string',
-                'attr' => ['placeholder' => 'jj-mm-aaaa'], // Placeholder for dd-mm-yyyy format
+                'attr' => ['placeholder' => 'jj-mm-aaaa'],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Filtrer']);
     }

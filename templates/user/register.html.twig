@@ -1,20 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un nouvel utilisateur{% endblock %}
+{% block title %}Ajouter un nouvel utilisateur
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="main">
-        <div class="section">
-            <h1>Ajouter un nouvel utilisateur</h1>
+	<div class="container">
+		<div class="main">
+			<div class="section">
+				<h1>Ajouter un nouvel utilisateur</h1>
 
-            <form action="{{ path('user_register') }}" method="post">
-                {{ form_widget(form) }}
-                <button type="submit" class="btn btn-sm fw-bold">Enregistrer</button>
-                <a href="{{ path('home') }}" class="btn btn-sm fw-bold">Annuler</a>
-            </form>
+				<form action="{{ path('user_register') }}" method="post">
+					{{ form_widget(form) }}
+					<button type="submit" class="btn btn-sm fw-bold">Enregistrer</button>
+					<a href="{{ path('home') }}" class="btn btn-sm fw-bold">Annuler</a>
+				</form>
 
-        </div>
-    </div>
-</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
