@@ -2,7 +2,7 @@
 
 {% block title %}Page d'accueil{% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="container">
     <div class="row mb-4">
         <div class="col-md-12">
@@ -21,12 +21,13 @@
                     {{ form_widget(form.end_date, {'attr': {'class': 'form-controldatepicker input-group-text', 'placeholder': 'jj-mm-aaaa', 'style': 'height: auto;'}}) }}
                 </div>
                 <div class="form-group ml-2">
-                    <div class="d-flex">
-                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mr-2', 'style': 'height: auto;'}}) }}
+                    <div class="d-flex flex-column flex-md-row">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mb-2 mb-md-0 mr-md-2', 'style': 'height: auto;'}}) }}
                         <a href="{{ path('home') }}" class="btn btn-secondary" style="height: auto;">Réinitialiser les filtres</a>
                     </div>
                 </div>
             {{ form_end(form) }}
+        </div>
     </div>
   </div>
   {% if form.start_date.vars.data is defined and form.end_date.vars.data is defined %}

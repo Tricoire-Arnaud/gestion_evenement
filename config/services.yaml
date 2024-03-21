@@ -24,6 +24,7 @@ services:
         arguments:
             $eventRepository: '@App\Repository\EventRepository'
             $entityManager: '@doctrine.orm.entity_manager'
+            $passwordHasher: '@security.password_hasher'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

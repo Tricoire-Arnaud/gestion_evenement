@@ -8,10 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', columns: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -32,6 +33,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message : "Le mot de passe ne peut pas être vide")]
+    #[Assert\Length(
+        min: 8,
+        minMessage: "Le mot de passe doit contenir au moins {{ limit }} caractères",
+    )]
+    #[Assert\Regex(
+        pattern: "/[A-Z]/",
+        message: "Le mot de passe doit contenir au moins une majuscule",
+    )]
+    #[Assert\Regex(
+        pattern: "/\d/",
+        message: "Le mot de passe doit contenir au moins un chiffre",
+    )]
+    #[Assert\Regex(
+        pattern: "/[@$!%*?&]/",
+        message: "Le mot de passe doit contenir au moins un caractère spécial",
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -108,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 

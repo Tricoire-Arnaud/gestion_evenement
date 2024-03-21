@@ -1,5 +1,4 @@
-<?php 
-// src/Service/AppManager.php
+<?php
 
 namespace App\Service;
 
@@ -7,30 +6,33 @@ use App\Entity\User;
 use App\Entity\Event;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AppManager
 {
     private $entityManager;
     private $eventRepository;
+    private $passwordHasher;
+    private $validator;
 
-    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository)
+    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator)
     {
         $this->entityManager = $entityManager;
         $this->eventRepository = $eventRepository;
+        $this->passwordHasher = $passwordHasher;
+        $this->validator = $validator;
     }
 
-    public function registerUser(array $userData): User
+    public function registerUser(User $user): void
     {
-        $user = new User();
-        $user->setName($userData['name']);
-        $user->setEmail($userData['email']);
-        $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
+        // Hasher le mot de passe
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($hashedPassword);
 
+        // Persister l'utilisateur en base de données
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-
-        return $user;
     }
 
     public function updateUser(User $user, array $userData): User
@@ -97,14 +99,9 @@ class AppManager
     {
         return $this->eventRepository->findByDateRange($startDate, $endDate);
     }
-    
-    
-    
 
     public function getAllUpcomingEvents(): array
     {
         return $this->eventRepository->findUpcomingEvents();
     }
-
-   
 }

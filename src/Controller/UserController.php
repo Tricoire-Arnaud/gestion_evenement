@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\UserType;
 use App\Service\AppManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +19,16 @@ class UserController extends AbstractController
         $this->appManager = $appManager;
     }
 
-    #[Route('/register', name: 'user_register')]
+    #[Route('/register', name: 'user_register', methods: ['GET', 'POST'])]
     public function register(Request $request): Response
     {
-        $form = $this->createForm(UserType::class);
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userData = $form->getData();
-            $this->appManager->registerUser($userData);
+            // Appeler la méthode registerUser avec l'objet User via le service AppManager
+            $this->appManager->registerUser($user);
 
             $this->addFlash('success', 'Inscription réussie! Vous pouvez maintenant vous connecter.');
             return $this->redirectToRoute('user_login');
@@ -36,6 +38,7 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    
 
     #[Route('/login', name: 'user_login')]
     public function login(): Response

@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Website{% endblock %}</title>
+    <title>{% block title %}Les evenements de votre région{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">My Website</a>
+        <a class="navbar-brand" href="{{ path('home') }}">Les evenements de votre région</a>
         <!-- Add your navigation links here -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                {% if app.user %}
+                    <a class="nav-link" href="{{ path('event_create') }}">Ajouter un événement</a>
+                    <span class="navbar-text">Connecté en tant que : {{ app.user.name }}</span>
+                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a> <!-- Ajout du lien de déconnexion -->
+                {% else %}
+                    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                    <a class="nav-link" href="{{ path('user_register') }}">Inscription</a> <!-- Ajout du lien vers la page d'inscription -->
+                {% endif %}
+            </li>
+        </ul>
     </nav>
     
     <div class="container mt-4">
-        {% block body %}{% endblock %}
+        {% block content %}{% endblock %}
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
