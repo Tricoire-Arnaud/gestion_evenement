@@ -74,7 +74,6 @@ Une fois ces étapes terminées, l'interface de l'application de gestion des év
 
 Utilisation de Symfony pour le développement de l'application back-end.
 Utilisation de Doctrine ORM pour la gestion de la base de données.
-Utilisation de JWT pour l'authentification des utilisateurs.
 Utilisation de Bootstrap pour le design de l'interface utilisateur.
 
 ## Limitations Éventuelles
