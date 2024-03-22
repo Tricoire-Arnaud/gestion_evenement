@@ -69,3 +69,16 @@ Une fois ces étapes terminées, l'interface de l'application de gestion des év
 - **Création d'événements :** Les utilisateurs connectés peuvent créer de nouveaux événements en accédant à la page de création d'événements à partir de la barre de navigation.
 - **Modification et Suppression d'événements :** Les utilisateurs connectés peuvent modifier et supprimer leurs propres événements en accédant à la page de détail de l'événement correspondant.
 - **Inscription et Désinscription à un événement :** Les utilisateurs connectés peuvent s'inscrire et se désinscrire à un événement en accédant à la page de détail de l'événement correspondant.
+
+## Choix de Conception
+
+Utilisation de Symfony pour le développement de l'application back-end.
+Utilisation de Doctrine ORM pour la gestion de la base de données.
+Utilisation de JWT pour l'authentification des utilisateurs.
+Utilisation de Bootstrap pour le design de l'interface utilisateur.
+
+## Limitations Éventuelles
+
+La sécurité des données sensibles comme les mots de passe pourrait être renforcée avec des techniques supplémentaires telles que la mise en place de JWT Token.
+Certaines fonctionnalités avancées comme la pagination peuvent ne pas être implémentées.
+L'application ne prend pas encore en charge la gestion des rôles et des autorisations.
